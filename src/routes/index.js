@@ -1,4 +1,5 @@
 const {Router} = require('express');
+const appController = require('../controllers/appController');
 
 const router = new Router();
 
@@ -29,7 +30,8 @@ router.put('/users/:id',
 router.delete('/users/:id', checkJwt, userController.destroy);
 
 router.get('/states', stateController.index);
-
 router.get('/states/:state/:city?', stateController.show);
+
+router.get('/apps', appController.index);
 
 module.exports = router;
