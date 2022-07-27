@@ -31,8 +31,10 @@ module.exports = {
         });
       }
 
+      delete user.password;
+
       const expiresIn = 3600;
-      const token = jwt.sign({id: user.id}, process.env.API_SECRET_TOKEN, {
+      const token = jwt.sign(user, process.env.API_SECRET_TOKEN, {
         expiresIn,
       });
 
@@ -40,6 +42,16 @@ module.exports = {
         token,
         expiresIn,
       });
+    } catch ({message}) {
+      return res.status(500).json({message});
+    }
+  },
+
+  getLoggedUser({loggedUser}, res) {
+    try {
+      delete loggedUser.iat;
+      delete loggedUser.exp;
+      return res.status(200).json(loggedUser);
     } catch ({message}) {
       return res.status(500).json({message});
     }

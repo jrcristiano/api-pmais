@@ -16,6 +16,7 @@ const userValidation = require('../validations/userValidation');
 
 /* Login */
 router.post('/login', authController.login);
+router.get('/authenticated-user', checkJwt, authController.getLoggedUser);
 router.post('/register', userValidation.store, userController.store);
 
 /* Users */
@@ -32,6 +33,6 @@ router.delete('/users/:id', checkJwt, userController.destroy);
 router.get('/states', stateController.index);
 router.get('/states/:state/:city?', stateController.show);
 
-router.get('/apps', appController.index);
+router.get('/apps', checkJwt, appController.index);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const {getLoggedUser} = require('../controllers/authController');
 
 module.exports = (req, res, next) => {
   const accessToken = req.headers.authorization;
@@ -15,7 +16,7 @@ module.exports = (req, res, next) => {
       });
     }
 
-    req.userId = decoded.id;
+    req.loggedUser = decoded;
     next();
   });
 };
