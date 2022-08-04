@@ -18,12 +18,12 @@ const paginate = async (query, req) => {
 
   req.query.perPage = perPage;
 
-  let offset = page || 1;
-  offset = offset - 1;
-  offset = offset * perPage;
+  page = page || 1;
+  page = page - 1;
+  page = page * perPage;
 
   const rows = await query;
-  const paginatedList = await query.limit(perPage).offset(offset);
+  const paginatedList = await query.limit(perPage).offset(page);
 
   let lastPage = rows.length / perPage;
   lastPage = Math.ceil(lastPage);
@@ -40,19 +40,18 @@ const getPaginationUrl = (req, page, lastPage) => {
   const {protocol, baseUrl} = req;
   const {perPage} = req.query;
 
-  const nextPage = page < lastPage ? page + 1 : null;
-  const prevPage = page - 1 || null;
+  const nextPage = page < lastPage ? page + 2 : null;
+  const prevPage = page > 0 ? page - 1 : null;
 
   const url = `${protocol}://${req.headers.host}${baseUrl}`;
-  const path = req.route.path;
 
   return {
     nextPage,
     prevPage,
-    nextPageUrl: `${url}${path}?perPage=${perPage}&page=${nextPage}`,
-    prevPageUrl: `${url}${path}?perPage=${perPage}&page=${prevPage}`,
-    firstPageUrl: `${url}${path}?perPage=${perPage}&page=1`,
-    lastPageUrl: `${url}${path}?perPage=${perPage}&page=${lastPage}`,
+    nextPageUrl: `${url}?perPage=${perPage}&page=${nextPage}`,
+    prevPageUrl: `${url}?perPage=${perPage}&page=${prevPage}`,
+    firstPageUrl: `${url}?perPage=${perPage}&page=1`,
+    lastPageUrl: `${url}?perPage=${perPage}&page=${lastPage}`,
   };
 };
 
